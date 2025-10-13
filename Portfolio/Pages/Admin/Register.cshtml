@@ -1,0 +1,78 @@
+@page
+@model Portfolio.Pages.Admin.RegisterModel
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+<section class="container-sm w-50 reveal">
+
+    <div class="card">
+        <h3 class="card-header text-secondary-emphasis reveal">Register</h3>
+        <form id="registrationForm" method="post" class="card-body needs-validation" novalidate>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" /></div>
+            <span asp-validation-for="Input.Email" class="invalid-feedback"></span>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input asp-for="Input.Password" type="password" class="form-control" required autocomplete="new-password" />
+                <span asp-validation-for="Input.Password" class="invalid-feedback"></span>
+            </div>
+            <div class="mb-5">
+                <label class="form-label">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" type="password" class="form-control" required autocomplete="new-password" />
+                <span asp-validation-for="Input.ConfirmPassword" class="invalid-feedback"></span>
+            </div>
+            <button id="regBtn" class="btn btn-primary  w-100" type="submit">Register</button>
+        </form>
+        </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var form = document.getElementById('registrationForm');
+            var emailInput = form.querySelector('[name="Input.Email"]');
+            var passwordInput = form.querySelector('[name="Input.Password"]');
+            var passwordConfirm = form.querySelector('[name="Input.ConfirmPassword"]');
+            var regBtn = document.getElementById('regBtn');
+
+            function revealButton() {
+                regBtn.classList.remove('d-none');
+                regBtn.classList.add('animate__animated', 'animate__fadeInUp');
+            }
+
+            function hideButton() {
+                regBtn.classList.add('d-none');
+                regBtn.classList.remove('animate__animated', 'animate__fadeInUp');
+            }
+
+            function validateFields() {
+                var emailFilled = emailInput.value.trim() !== '';
+                var passwordFilled = passwordInput.value.trim() !== '';
+                var passwordFilledConfirm = passwordConfirm.value.trim() !== '';
+                if (emailFilled && passwordFilled && passwordFilledConfirm) {
+                    revealButton();
+                } else {
+                    hideButton();
+                }
+            }
+
+            emailInput.addEventListener('input', validateFields);
+            passwordInput.addEventListener('input', validateFields);
+            passwordConfirm.addEventListener('input', validateFields);
+
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+            
+            validateFields();
+        })();
+    </script>
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> *@
+}

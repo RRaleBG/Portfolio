@@ -1,0 +1,71 @@
+﻿@page
+@model Portfolio.Pages.Admin.Users.IndexModel
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<section class="container-xxl">
+    <div class="card">
+        <h2 class="card-header">Users</h2>
+        <div class="card-body">
+        <p><a class="btn btn-sm btn-outline-secondary" asp-page="../Register">New User</a></p>
+        <div class="table table-dark table-bg-transparent table-hover">
+            <div class="row fw-bold text-start text-secondary-emphasis border-bottom pb-2 mb-3">      
+                <div class="col">Email</div>
+                <div class="col">Confirmed</div>
+                <div class="col">Date</div>
+                <div class="col"></div>                
+            </div>
+            @foreach (var u in Model.Users)
+            {
+               <div class="row fw-bold text-start text-secondary-emphasis pb-2 mb-3 user-row">
+                    <div class="col">@u.Email</div>
+                    <div class="col">@u.EmailConfirmed</div>
+                    <div class="col">@u.SecurityStamp</div>
+                    <div class="col">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-outline-danger" onclick="deleteUser('@u.Id', this)">Delete</a>                        
+                    </div>                      
+               </div>   
+            }            
+        </div>        
+    </div>
+</section>
+
+@section Scripts {
+<script>
+function deleteUser(userId, btn) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    fetch('?handler=Delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+        },
+        body: JSON.stringify({ id: userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            btn.closest('.user-row').remove();
+            showToast(data.message, 'success');
+        } else {
+            showToast('Delete failed', 'error');
+        }
+    });
+}
+
+function showToast(message, type) {
+    var toastEl = document.getElementById('mainToast');
+    if (!toastEl) return;
+    // Set message
+    toastEl.querySelector('.toast-body').textContent = message;
+    // Optionally set type (success/error) via class
+    toastEl.classList.remove('bg-success', 'bg-danger');
+    toastEl.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
+    // Show toast
+    var toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+    toast.show();
+}
+</script>
+@Html.AntiForgeryToken()
+}

@@ -1,0 +1,68 @@
+@page
+@model Portfolio.Pages.ContactModel
+@using System.Text.Encodings.Web
+@{
+    ViewData["Title"] = "Contact";
+}
+
+
+<section class="container-xxl">
+    <h2 class="mb-3">Contact</h2>
+    <p class="text-muted mb-4">I usually respond within 24 hours. Tell me a bit about your project.</p>
+    <form method="post" class="card p-4 hover-lift needs-validation" novalidate>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="Input_Name">Your Name</label>
+                <input asp-for="Input.Name" class="form-control" required />
+                <span asp-validation-for="Input.Name" class="invalid-feedback"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="Input_Email">Your Email</label>
+                <input asp-for="Input.Email" class="form-control" required />
+                <span asp-validation-for="Input.Email" class="invalid-feedback text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="Input_Subject">Subject</label>
+                <input asp-for="Input.Subject" class="form-control" required />
+                <span asp-validation-for="Input.Subject" class="invalid-feedback"></span>
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="Input_Message">Message</label>
+                <textarea asp-for="Input.Message" class="form-control" rows="6" required></textarea>
+                <span asp-validation-for="Input.Message" class="invalid-feedback"></span>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Send</button>
+                <a class="btn btn-outline-secondary" href="/">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.SuccessMessage != null)
+    {
+        <div class="alert alert-success">@HtmlEncoder.Default.Encode(Model.SuccessMessage)</div>
+    }
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@HtmlEncoder.Default.Encode(Model.ErrorMessage)</div>
+    }
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+<script>
+    (function () {
+        window.addEventListener('unhandled rejection', function (ev) {
+            try {
+                const reason = ev.reason;
+                const message = reason && reason.message ? reason.message : String(reason);
+                if (message && message.includes('A listener indicated an asynchronous response by returning true')) {
+                    ev.preventDefault();
+                    console.debug('Ignored extension-origin unhandled rejection:', message);
+                }
+            } catch (err) {
+            }
+        });
+    })();
+    </script>
+}

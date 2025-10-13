@@ -1,0 +1,19 @@
+@page "{slug}"
+@model Portfolio.Pages.PostModel
+@using System.Text.Encodings.Web
+@{
+    ViewData["Title"] = Model.Item?.Title ?? "Post";
+}
+
+@if (Model.Item == null)
+{
+    <div class="alert alert-warning">Post not found.</div>
+}
+else
+{
+    <article>
+        <h2>@HtmlEncoder.Default.Encode(Model.Item.Title)</h2>
+        <div class="text-muted">@Model.Item.PublishedAt.ToString("yyyy-MM-dd")</div>
+        <div class="mt-3">@HtmlEncoder.Default.Encode(Model.Item.Content)</div>
+    </article>
+}

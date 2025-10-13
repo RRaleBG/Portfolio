@@ -1,0 +1,18 @@
+@page "{id:int}"
+@model Portfolio.Pages.Admin.Projects.EditModel
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<h2>Edit Project</h2>
+<form method="post">
+    <input type="hidden" asp-for="Item.Id" />
+    <div class="mb-3"><label class="form-label">Title</label><input asp-for="Item.Title" class="form-control" /></div>
+    <div class="mb-3"><label class="form-label">Summary</label><textarea asp-for="Item.Summary" class="form-control"></textarea></div>
+    <div class="mb-3"><label class="form-label">Url</label><input asp-for="Item.Url" class="form-control" /></div>
+    <div class="mb-3"><label class="form-label">Image Url</label><input asp-for="Item.ImageUrl" class="form-control" /></div>
+    <div class="mb-3"><label class="form-label">Tags</label><input asp-for="Item.Tags" class="form-control" /></div>
+    <div class="mb-3"><label class="form-label">Date</label><input asp-for="Item.Date" class="form-control" type="date" /></div>
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-secondary" asp-page="Index">Cancel</a>
+</form>

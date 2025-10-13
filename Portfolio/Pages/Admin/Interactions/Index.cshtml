@@ -1,0 +1,97 @@
+@page
+@model Portfolio.Pages.Admin.Interactions.IndexModel
+@{
+    ViewData["Title"] = "Interactions";
+}
+
+<section class="container-xxl">
+<div class="card">
+
+    <div class="card-header">
+            
+        <h3 class="text-secondary-emphasis">Saved Interactions</h3>
+        <div class="d-flex gap-2 mb-1">
+          <button id="reindex-btn" class="btn btn-sm btn-outline-secondary text-secondary-emphasis">Rebuild RAG Index (now)</button>
+            <button id="reindex-bg-btn" class="btn btn-sm btn-outline-secondary text-secondary-emphasis">Rebuild in Background</button>
+            <button id="diag-btn" class="btn btn-sm btn-outline-secondary text-secondary-emphasis">Diagnostics</button>
+            <span id="diag-result" class="ms-2"></span>
+        </div>
+    </div>
+
+    <div class="card-body">             
+        <div class="row fw-bold text-start text-secondary-emphasis border-bottom pb-2 mb-3">
+            <div class="col">Time & Date</div>
+            <div class="col">Question</div>
+            <div class="col">Answer</div>
+        </div>
+
+        @foreach (var it in Model.Interactions)
+        {
+            <div class="row text-secondary-emphasis mb-2">
+                <div class="col">@it.CreatedAt.ToLocalTime().ToString("g")</div>
+                <div class="col">@it.Question</div>
+                <div class="col">@it.Answer</div>
+            </div>
+        }  
+        </div>    
+    </div>
+</section>
+
+
+@section Scripts {
+<script>
+(function(){
+    const reindex = document.getElementById('reindex-btn');
+    const reindexBg = document.getElementById('reindex-bg-btn');
+    const diag = document.getElementById('diag-btn');
+    const res = document.getElementById('diag-result');
+
+    reindex?.addEventListener('click', async function(){
+        if(!confirm('This will rebuild the RAG index now and may consume API quota. Continue?')) return;
+        reindex.disabled = true; res.textContent = 'Reindexing...';
+        try{
+            const r = await fetch('/api/ai/reindex', { method: 'POST' });
+            const j = await r.json();
+            if(r.ok){ res.textContent = 'Reindex complete: ' + j.count + ' chunks'; }
+            else { res.textContent = 'Reindex error: ' + (j.error||JSON.stringify(j)); }
+        }catch(e){ res.textContent = 'Reindex failed: '+e; }
+        reindex.disabled = false;
+    });
+
+    reindexBg?.addEventListener('click', async function(){
+        reindexBg.disabled = true; res.textContent = 'Enqueuing background reindex...';
+        try{
+            const r = await fetch('/api/ai/reindex/background', { method: 'POST' });
+            const j = await r.json();
+            if(r.ok){ res.textContent = 'Enqueued job: ' + j.jobId; }
+            else { res.textContent = 'Enqueue error: ' + (j.error||JSON.stringify(j)); }
+        }catch(e){ res.textContent = 'Enqueue failed: '+e; }
+        reindexBg.disabled = false;
+    });
+
+    diag?.addEventListener('click', async function(){
+        diag.disabled = true; res.textContent = 'Querying...';
+        try{
+            const r = await fetch('/api/ai/diagnostics');
+            const j = await r.json();
+            if(r.ok){ res.textContent = 'Index: ' + j.indexCount + ' | AI sample: ' + j.aiSample; }
+            else { res.textContent = 'Diag error: ' + (j.error||JSON.stringify(j)); }
+        }catch(e){ res.textContent = 'Diag failed: '+e; }
+        diag.disabled = false;
+    });
+
+    // Poll status when page loads
+    async function pollStatus(){
+        try{
+            const r = await fetch('/api/ai/reindex/status');
+            if(r.ok){ const j = await r.json();
+                if(j.isRunning){ res.textContent = 'Reindex running (job ' + (j.currentJobId||'') + ')'; }
+                else if(j.lastRunAt){ res.textContent = 'Last run: ' + new Date(j.lastRunAt).toLocaleString() + ' (' + j.lastCount + ' chunks)'; }
+                if(j.lastError){ res.textContent += ' Error: ' + j.lastError; }
+            }
+        }catch(e){ /* ignore */ }
+    }
+    pollStatus();
+})();
+</script>
+}

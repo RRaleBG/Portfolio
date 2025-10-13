@@ -1,0 +1,78 @@
+@page
+@model Portfolio.Pages.Admin.LoginModel
+@{
+	Layout = "/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin Login";
+}
+<div class="d-flex align-items-center justify-content-center">
+    <section class="container-sm w-50 reveal">
+        <div class="card">
+            <h3 class="card-header text-secondary-emphasis reveal">Login</h3>
+            <form id="loginForm" method="post" class="card-body py-3 px-3 needs-validation" novalidate autocomplete="on">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="invalid-feedback"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" required />
+                    <span asp-validation-for="Input.Email" class="invalid-feedback"></span>
+                    <div class="invalid-feedback">Please enter your email.</div>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" class="form-control" type="password" required autocomplete="current-password" />
+                    <span asp-validation-for="Input.Password" class="invalid-feedback"></span>
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+                <input type="hidden" asp-for="ReturnUrl" />
+                <button id="loginBtn" class="btn btn-primary w-100 reveal" type="submit">Login</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var form = document.getElementById('loginForm');
+            var emailInput = form.querySelector('[name="Input.Email"]');
+            var passwordInput = form.querySelector('[name="Input.Password"]');
+            var loginBtn = document.getElementById('loginBtn');
+
+            function revealButton() {
+                loginBtn.classList.remove('d-none');
+                loginBtn.classList.add('animate__animated', 'animate__fadeInUp');
+            }
+
+            function hideButton() {
+                loginBtn.classList.add('d-none');
+                loginBtn.classList.remove('animate__animated', 'animate__fadeInUp');
+            }
+
+            function validateFields() {
+                var emailFilled = emailInput.value.trim() !== '';
+                var passwordFilled = passwordInput.value.trim() !== '';
+                if (emailFilled && passwordFilled) {
+                    revealButton();
+                } else {
+                    hideButton();
+                }
+            }
+
+            emailInput.addEventListener('input', validateFields);
+            passwordInput.addEventListener('input', validateFields);
+
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+
+            // Initial state
+            validateFields();
+        })();
+    </script>
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> *@
+}
