@@ -45,5 +45,5 @@ jobs:
         run: |
           echo "$SSH_KEY" > private_key
           chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./publish/ $SSH_USER@$SSH_HOST:/var/www/Portfolio/publish
-          ssh -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'sudo systemctl restart portfolio.service'
+          rsync -avz -e "ssh -i private_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" ./publish/ $SSH_USER@$SSH_HOST:/var/www/Portfolio/publish
+          ssh -i private_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'sudo systemctl restart portfolio.service'
