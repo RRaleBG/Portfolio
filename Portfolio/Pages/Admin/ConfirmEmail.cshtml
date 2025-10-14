@@ -1,0 +1,8 @@
+@page
+@model Portfolio.Pages.Admin.ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+<h2>Email Confirmation</h2>
+@if (!string.IsNullOrEmpty(Model.Error)) { <div class="alert alert-danger">@Model.Error</div> }
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-success">@Model.Message</div> }

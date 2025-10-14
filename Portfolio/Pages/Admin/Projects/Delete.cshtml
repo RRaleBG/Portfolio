@@ -1,0 +1,13 @@
+@page "{id:int}"
+@model Portfolio.Pages.Admin.Projects.DeleteModel
+@{
+    ViewData["Title"] = "Delete Project";
+}
+
+<h2>Delete Project</h2>
+<div class="alert alert-warning">Are you sure you want to delete '@Model.Item.Title'?</div>
+<form method="post">
+    <input type="hidden" asp-for="Item.Id" />
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-secondary" asp-page="Index">Cancel</a>
+</form>

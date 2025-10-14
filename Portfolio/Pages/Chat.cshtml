@@ -1,0 +1,129 @@
+﻿@page
+@model Portfolio.Pages.ChatModel
+@using System.Text.Encodings.Web
+@{
+	ViewData["Title"] = "Chat with Me";
+}
+
+<h2>💬 Rados personal AI Assistant</h2>
+<div class="container mt-4">
+    <div id="chat-box" class="border rounded p-3 mb-3" style="height:300px; overflow-y:auto;">
+        @foreach (var message in Model.Messages)
+        {
+            <div class="chat-message">
+                <span class="chat-role">@HtmlEncoder.Default.Encode(message.Role):</span>
+                <span class="chat-content">@HtmlEncoder.Default.Encode(message.Content)</span>
+            </div>
+        }
+    </div>
+    <div class="input-group">
+        <input id="user-input" class="form-control" placeholder="Type your message..." />
+        <button class="btn btn-primary" id="send-btn">Send</button>
+    </div>
+</div>
+
+<div class="assistant-bubble" id="assistant-bubble" title="Chat with me">🤖</div>
+<div class="assistant-panel" id="assistant-panel">
+    <header>
+        <strong>Assistant</strong>
+        <button type="button" class="btn-close" aria-label="Close" id="assistant-close"></button>
+    </header>
+    <div class="body" id="assistant-body"></div>
+
+    <div class="footer">
+        <div class="input-group">
+            <input id="assistant-input" class="form-control" placeholder="Ask me anything..." />
+            <button class="btn btn-primary" id="assistant-send">Ask</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/voicechat.js"></script>
+    <script>
+        (function(){
+            const bubble = document.getElementById('assistant-bubble');
+            const panel = document.getElementById('assistant-panel');
+            const closeBtn = document.getElementById('assistant-close');
+            const body = document.getElementById('assistant-body');
+            const input = document.getElementById('assistant-input');
+            const send = document.getElementById('assistant-send');
+
+            function appendMessage(text, fromUser){
+                const d = document.createElement('div');
+                d.className = fromUser ? 'text-end text-primary mb-2' : 'text-start text-success mb-2';
+                d.textContent = text;
+                return d;
+            }
+
+            function appendFeedbackControls(question, answerElem, answerText){
+                const ctrl = document.createElement('div');
+                ctrl.className = 'mt-1';
+                const up = document.createElement('button');
+                up.className = 'btn btn-sm btn-outline-success me-1';
+                up.textContent = '👍';
+                const down = document.createElement('button');
+                down.className = 'btn btn-sm btn-outline-danger';
+                down.textContent = '👎';
+
+                up.addEventListener('click', ()=> sendFeedback(question, answerText, 1, answerElem, up, down));
+                down.addEventListener('click', ()=> sendFeedback(question, answerText, -1, answerElem, up, down));
+
+                ctrl.appendChild(up);
+                ctrl.appendChild(down);
+                return ctrl;
+            }
+
+            async function sendFeedback(question, answer, rating, element, upBtn, downBtn){
+                try {
+                    upBtn.disabled = downBtn.disabled = true;
+                    await fetch('/api/feedback', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question: question, answer: answer, rating: rating })
+                    });
+                    // simple UI cue
+                    element.classList.add('border','rounded','p-2');
+                    const note = document.createElement('div');
+                    note.className = 'small text-muted mt-1';
+                    note.textContent = 'Thanks — feedback recorded.';
+                    element.appendChild(note);
+                } catch (e) {
+                    upBtn.disabled = downBtn.disabled = false;
+                }
+            }
+
+            async function sendMsg(text){
+                if(!text) return;
+                // append user message
+                const userEl = appendMessage(text, true);
+                body.appendChild(userEl);
+                input.value = '';
+                // thinking indicator
+                const thinking = appendMessage('Thinking…', false);
+                body.appendChild(thinking);
+                body.scrollTop = body.scrollHeight;
+                try {
+                    const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: text })});
+                    const data = await res.json();
+                    const reply = (data && (data.response ?? data.reply)) || "I'm not sure how to answer that.";
+                    // replace thinking with assistant reply
+                    thinking.remove();
+                    const assistantEl = appendMessage(reply, false);
+                    body.appendChild(assistantEl);
+                    // add feedback buttons attached to this assistant element
+                    const fb = appendFeedbackControls(text, assistantEl, reply);
+                    assistantEl.appendChild(fb);
+                } catch(e){
+                    thinking.textContent = 'Error: '+(e.message||e);
+                }
+                body.scrollTop = body.scrollHeight;
+            }
+
+            bubble.addEventListener('click', ()=>{ panel.style.display = 'block'; });
+            closeBtn.addEventListener('click', ()=>{ panel.style.display = 'none'; });
+            send.addEventListener('click', ()=> sendMsg(input.value.trim()));
+            input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ sendMsg(input.value.trim()); }});
+        })();
+    </script>
+}

@@ -1,0 +1,102 @@
+﻿@page
+@model Portfolio.Pages.BlogModel
+@using System.Text.Encodings.Web
+@{
+    ViewData["Title"] = "Blogs";
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $('.star-rating .star').on('click', function () {
+                var $stars = $(this).parent().find('.star');
+                var stars = $(this).data('value');
+                var blogId = $(this).closest('.star-rating').data('blog-id');
+                if (!blogId || !stars) {
+                    alert('Invalid blog or rating value.');
+                    return;
+                }
+                $stars.removeClass('selected');
+                $stars.each(function (i) {
+                    if (i < stars) $(this).addClass('selected');
+                });
+                // Ajax POST
+                $.ajax({
+                    url: '/api/blograte',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ blogId: blogId, stars: stars }),
+                    success: function () {
+                        var $container = $stars.closest('.d-flex');
+                        var $avgText = $container.find('.avg-rating');
+                        $avgText.text(stars.toFixed(1) + ' / 5');
+                        // Optionally show a success message
+                        // $('<span class="text-success ms-2">Thank you for rating!</span>').insertAfter($avgText).fadeOut(2000);
+                    },
+                    error: function (xhr) {
+                        let msg = 'Error submitting rating';
+                        if (xhr && xhr.responseText) msg += ': ' + xhr.responseText;
+                        alert(msg);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<section class="container-xxl">
+
+  <h2 class="mb-3">Blog</h2>
+
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+
+      @foreach (var p in Model.Posts)
+      {
+        <div class="col">
+
+          <article class="card hover-lift h-100 p-3">
+            <header class="mb-2">
+              <h3 class="h5 m-0"><a asp-page="/Post" asp-route-slug="@p.Slug">@p.Title</a></h3>
+              <div class="text-muted small">@p.PublishedAt.ToString("yyyy-MM-dd")</div>
+            </header>
+
+            <p class="text-muted">@(p.Content?.Length > 200 ? HtmlEncoder.Default.Encode(p.Content.Substring(0,200))+"..." : HtmlEncoder.Default.Encode(p.Content))</p>
+            <div class="d-flex align-items-center gap-2">
+              <a class="btn btn-sm btn-primary" asp-page="/Post" asp-route-slug="@HtmlEncoder.Default.Encode(p.Slug)">Read</a>
+                @{
+                    var avgStars = p.Comments?.Any() == true ? p.Comments.Average(c => c.Stars) : 0;
+                }
+
+              <div class="star-rating ms-2" data-blog-id="@p.Id">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star @(i <= Math.Round(avgStars) ? "selected" : "")" data-value="@i">&#9733;</span>
+                    }
+                </div>
+
+                <span class="ms-1 small text-muted avg-rating">
+                    @(avgStars > 0 ? $"{avgStars:F1} / 5" : "No ratings")
+                </span>
+
+            </div>
+
+            <div class="mt-2">
+                <strong>Comments:</strong>
+                <ul class="list-unstyled">
+                    @foreach (var c in p.Comments)
+                    {
+                        <li>
+                            <span class="text-warning">@string.Concat(Enumerable.Repeat("★", c.Stars))</span>
+                            <span class="ms-1">@HtmlEncoder.Default.Encode(c.CommentText)</span>
+                            <span class="text-muted ms-2 small">@c.CreatedAt.ToString("yyyy-MM-dd")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+          </article>
+        </div>
+      }
+  </div>
+</section>

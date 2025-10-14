@@ -1,0 +1,121 @@
+﻿@page
+@model Portfolio.Pages.ProjectsModel
+@using System.Text.Encodings.Web
+@{
+    ViewData["Title"] = "Projects";
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $('.star-rating .star').on('click', function () {
+                var $stars = $(this).parent().find('.star');
+                var stars = $(this).data('value');
+                var projectId = $(this).closest('.star-rating').data('project-id');
+                if (!projectId || !stars) {
+                    alert('Invalid project or rating value.');
+                    return;
+                }
+                $stars.removeClass('selected');
+                $stars.each(function (i) {
+                    if (i < stars) $(this).addClass('selected');
+                });
+                // Ajax POST
+                $.ajax({
+                    url: '/api/rate',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ projectId: projectId, stars: stars }),
+                    success: function () {
+                        var $container = $stars.closest('.d-flex');
+                        var $avgText = $container.find('.avg-rating');
+                        $avgText.text(stars.toFixed(1) + ' / 5');
+                    },
+                    error: function (xhr) {
+                        let msg = 'Error submitting rating';
+                        if (xhr && xhr.responseText) msg += ': ' + xhr.responseText;
+                        alert(msg);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<section class="container-xxl">
+  <h2 class="mb-3">Projects</h2>
+
+  @if (User?.Identity?.IsAuthenticated ?? false)
+  {
+      <p class="mb-3">
+            <a class="btn btn-sm btn-outline-secondary p-2" asp-page="/Admin/Projects/Create">+ New Project</a>
+          <a class="btn btn-sm btn-outline-secondary py-2" asp-page="/Admin/Projects/Index">Manage Projects</a>
+      </p>
+  }
+
+  <div class="row row-cols-1 row-cols-md-3 g-3">
+    @foreach (var p in Model.Projects)
+    {
+      <div class="col">
+        <div class="card hover-lift h-100">
+          @if (!string.IsNullOrEmpty(p.ImageUrl))
+          {
+              <img class="card-img-top" src="@HtmlEncoder.Default.Encode(p.ImageUrl)" alt="@HtmlEncoder.Default.Encode(p.Title)" loading="lazy" />
+          }
+          <div class="card-body">
+            <h5 class="card-title">@HtmlEncoder.Default.Encode(p.Title)</h5>
+            <p class="card-text text-muted">@HtmlEncoder.Default.Encode(p.Summary)</p>
+
+            <div class="d-flex align-items-center gap-2">
+                @if (!string.IsNullOrEmpty(p.Url))
+                {
+                    <a class="btn btn-sm btn-primary" href="@HtmlEncoder.Default.Encode(p.Url)" target="_blank">Open</a>
+                }
+                @{
+                    var avgStars = p.Comments?.Any() == true ? p.Comments.Average(c => c.Stars) : 0;
+                }
+                <div class="star-rating ms-2" data-project-id="@p.Id">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star @(i <= Math.Round(avgStars) ? "selected" : "")" data-value="@i">&#9733;</span>
+                    }
+                </div>
+                <span class="ms-1 small text-muted avg-rating">
+                    @(avgStars > 0 ? $"{avgStars:F1} / 5" : "No ratings")
+                </span>
+                @if (!string.IsNullOrEmpty(p.GitHubUrl))
+                {           
+                    <a class="btn btn-sm btn-outline-secondary" href="@HtmlEncoder.Default.Encode(p.GitHubUrl)" target="_blank">GitHub</a>
+                }
+            </div>
+            <div class="mt-2">
+                <strong>Comments:</strong>
+                <ul class="list-unstyled">
+                    @foreach (var c in p.Comments)
+                    {
+                        <li>
+                            <span class="text-warning">@string.Concat(Enumerable.Repeat("★", c.Stars))</span>
+                            <span class="ms-1">@HtmlEncoder.Default.Encode(c.CommentText)</span>
+                            <span class="text-muted ms-2 small">@c.CreatedAt.ToString("yyyy-MM-dd")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+          </div>
+
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <small class="text-muted">@HtmlEncoder.Default.Encode(p.Tags)</small>
+            @if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                <span>
+                    <a class="btn btn-sm btn-outline-secondary p-2" asp-page="/Admin/Projects/Edit" asp-route-id="@p.Id">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-page="/Admin/Projects/Delete" asp-route-id="@p.Id">Delete</a>
+                </span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

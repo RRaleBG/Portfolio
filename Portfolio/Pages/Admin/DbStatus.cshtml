@@ -1,0 +1,27 @@
+@page
+@using Microsoft.AspNetCore.Identity
+@model Portfolio.Pages.Admin.DbStatusModel
+@{
+    ViewData["Title"] = "Database Status";
+}
+<h2>Database Status</h2>
+<form method="post">
+    <button type="submit" class="btn btn-danger">Force Reseed Database</button>
+</form>
+<br />
+<table class="table table-bordered">
+    <tr><th>Entity</th><th>Count</th></tr>
+    <tr><td>Users</td><td>@Model.UserCount</td></tr>
+    <tr><td>Roles</td><td>@Model.RoleCount</td></tr>
+    <tr><td>Projects</td><td>@Model.ProjectCount</td></tr>
+    <tr><td>Blog Posts</td><td>@Model.BlogPostCount</td></tr>
+    <tr><td>Contacts</td><td>@Model.ContactCount</td></tr>
+</table>
+@if (!string.IsNullOrEmpty(Model.AdminEmailStatus))
+{
+    <div class="alert alert-info">@Model.AdminEmailStatus</div>
+}
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success">@Model.StatusMessage</div>
+}

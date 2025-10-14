@@ -1,0 +1,49 @@
+name: Build and Deploy Portfolio
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore dependencies
+        run: dotnet restore PORTFOLIO/Portfolio.csproj
+      - name: Build
+        run: dotnet build PORTFOLIO/Portfolio.csproj --configuration Release --no-restore
+      - name: Publish
+        run: dotnet publish PORTFOLIO/Portfolio.csproj --configuration Release --output ./publish --no-restore
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-publish
+          path: ./publish
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: portfolio-publish
+          path: ./publish
+      - name: Deploy to Linux server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./publish/ $SSH_USER@$SSH_HOST:/var/www/portfolio/
+          ssh -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'sudo systemctl restart portfolio.service'

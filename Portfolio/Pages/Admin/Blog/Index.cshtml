@@ -1,0 +1,27 @@
+@page
+@model Portfolio.Pages.Admin.Blog.IndexModel
+@{
+    ViewData["Title"] = "Manage Blog";
+}
+
+<h2>Blog Posts</h2>
+
+<p><a class="btn btn-primary" asp-page="Create">New Post</a></p>
+
+<table class="table table-striped">
+    <thead><tr><th>Title</th><th>Slug</th><th>Date</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var p in Model.Items)
+    {
+        <tr>
+            <td>@p.Title</td>
+            <td>@p.Slug</td>
+            <td>@p.PublishedAt.ToString("yyyy-MM-dd")</td>
+            <td>
+                <a class="btn btn-sm btn-secondary" asp-page="Edit" asp-route-id="@p.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@p.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

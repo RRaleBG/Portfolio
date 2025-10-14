@@ -1,0 +1,91 @@
+@page
+@model Portfolio.Pages.CvModel
+@{
+    ViewData["Title"] = "CV";
+}
+
+<h2>CV</h2>
+<p>You can download the PDF or ask questions about my CV below.</p>
+<div class="mb-3">
+    <a class="btn btn-outline-primary" href="/Docs/RajcicRados.pdf" target="_blank">Download PDF</a>
+</div>
+<div class="row mb-3">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div id="cv-chat-box" class="border rounded p-3 mb-3" style="height:240px; overflow-y:auto;"></div>
+                <div class="input-group">
+                    <input id="cv-user-input" class="form-control" placeholder="Ask about my CV..." />
+                    <button class="btn btn-primary" id="cv-send-btn">Ask</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">CV Snippets</div>
+            <div class="card-body" id="cv-snippets">
+                <p class="text-muted">Loading snippets...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function(){
+    const box = document.getElementById('cv-chat-box');
+    const input = document.getElementById('cv-user-input');
+    const send = document.getElementById('cv-send-btn');
+    const snippetsEl = document.getElementById('cv-snippets');
+
+    function append(t, me){ const d=document.createElement('div'); d.className=me?'text-end text-primary mb-2':'text-start text-success mb-2'; d.textContent=t; box.appendChild(d); box.scrollTop=box.scrollHeight; }
+
+    async function ask(q){
+        append(q,true);
+        input.value='';
+        const waiting=append('Thinking...',false);
+        try{
+            const res = await fetch('/api/chat', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message:q })});
+            const data = await res.json();
+            append((data && (data.response ?? data.reply)) || "I'm not sure.", false);
+        }catch(e){ append('Error: '+e,false); }
+    }
+
+    send.addEventListener('click', ()=>{ const q=input.value.trim(); if(q) ask(q); });
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const q=input.value.trim(); if(q) ask(q); }});
+
+    // Load snippets and render
+    async function loadSnippets(){
+        snippetsEl.innerHTML = '<p class="text-muted">Loading snippets...</p>';
+        try{
+            const r = await fetch('/api/ai/snippets');
+            if(!r.ok) throw new Error('Request failed');
+            const list = await r.json();
+            if(!Array.isArray(list) || list.length===0){ snippetsEl.innerHTML = '<p class="text-muted">No snippets available.</p>'; return; }
+            snippetsEl.innerHTML = '';
+            list.slice(0,10).forEach(s=>{
+                const div = document.createElement('div');
+                div.className = 'snippet mb-2';
+                div.innerHTML = `<div class="small text-muted">${escapeHtml(s.source)}</div><div class="snippet-text">${escapeHtml(s.text.substring(0,200))}${s.text.length>200?'...':''}</div><div class="mt-1"><button class="btn btn-sm btn-outline-primary use-snippet">Use</button></div>`;
+                div.querySelector('.use-snippet').addEventListener('click', ()=>{
+                    input.value = s.text; input.focus();
+                });
+                snippetsEl.appendChild(div);
+            });
+        }catch(e){ snippetsEl.innerHTML = '<p class="text-danger">Failed to load snippets</p>'; }
+    }
+
+    function escapeHtml(unsafe) {
+        return unsafe
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/\"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+    }
+
+    loadSnippets();
+})();
+</script>
+}

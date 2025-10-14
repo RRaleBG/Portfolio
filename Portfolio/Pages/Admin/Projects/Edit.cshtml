@@ -1,0 +1,29 @@
+@page "{id:int}"
+@model Portfolio.Pages.Admin.Projects.EditModel
+@{
+    ViewData["Title"] = "Edit Project";
+}
+<section class="container-xxl py-2">
+
+        <h3 class="mb-3">Edit Project</h3>
+
+    <div class="card">
+
+        <form method="post" class="card-body">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <div class="mb-3"><label class="form-label">Title</label><input asp-for="Item.Title" class="form-control" /></div>
+            <div class="mb-3"><label class="form-label">Summary</label><textarea asp-for="Item.Summary" class="form-control"></textarea></div>
+            <div class="mb-3"><label class="form-label">Url</label><input asp-for="Item.Url" class="form-control" /></div>
+            <div class="mb-3"><label class="form-label">Image Url</label><input asp-for="Item.ImageUrl" class="form-control" /></div>
+            <div class="mb-3"><label class="form-label">Tags</label><input asp-for="Item.Tags" class="form-control" /></div>
+            <div class="mb-3">
+    <label class="form-label">Date</label>
+    <input asp-for="Item.Date" class="form-control" type="date" readonly />
+</div>
+            <button class="btn btn-sm btn-primary" type="submit">Save</button>
+            <a class="btn btn-sm btn-outline-secondary p-2" asp-page="Index">Cancel</a>
+        </form>
+    </div>
+
+</section>

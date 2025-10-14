@@ -1,0 +1,28 @@
+@page
+@model Portfolio.Pages.Admin.Projects.IndexModel
+@{
+    ViewData["Title"] = "Manage Projects";
+}
+
+<h2>Projects</h2>
+<p><a class="btn btn-sm btn-outline-secondary" asp-page="Create">New Project</a></p>
+
+<table class="table table-dark table-bg-transparent table-hover">
+
+    <thead><tr><th>Title</th><th>Tags</th><th>Date</th><th></th></tr></thead>
+
+    <tbody>
+    @foreach (var p in Model.Items)
+    {
+        <tr>
+            <td>@p.Title</td>
+            <td>@p.Tags</td>
+            <td>@p.Date?.ToString("yyyy-MM-dd")</td>
+            <td>
+                <a class="btn btn-sm btn-btn-outline-secondary" asp-page="Edit" asp-route-id="@p.Id">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" asp-page="Delete" asp-route-id="@p.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
