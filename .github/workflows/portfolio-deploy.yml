@@ -39,11 +39,11 @@ jobs:
           path: ./publish
       - name: Deploy to Linux server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
+          echo "$SSH_KEY" > private_key
           chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./publish/ $SSH_USER@$SSH_HOST:/var/www/portfolio/
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./publish/ $SSH_USER@$SSH_HOST:/var/www/Portfolio/publish
           ssh -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'sudo systemctl restart portfolio.service'
