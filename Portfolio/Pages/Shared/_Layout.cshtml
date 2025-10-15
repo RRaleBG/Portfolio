@@ -37,19 +37,19 @@
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                         <li class="nav-item"><a class="nav-link" asp-page="/Projects">Projects</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-page="/Admin/Index">Admin</a></li>
+                 
                         <li class="nav-item"><a class="nav-link" asp-page="/Blog">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-page="/Cv">CV</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-page="/Chat">Chat</a></li>
                         <li class="nav-item"><a class="nav-link" asp-page="/Contact">Contact</a></li>
+
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item"><a class="nav-link" asp-page="/Dashboard/Index">Dashboard</a></li>
+                           
                             @if (User.IsInRole("Admin"))
                             {
-                                <li class="nav-item"><a class="nav-link" asp-page="/Admin/Projects/Index">Manage Projects</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" asp-page="/Admin/Blog/Index">Manage Blog</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-page="/Dashboard/Index">Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-page="/Cv">CV</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-page="/Chat">Chat</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-page="/Admin/Index">Admin</a></li>
                             }
                         }
                         else

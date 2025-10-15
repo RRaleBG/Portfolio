@@ -24,12 +24,16 @@ builder.Services
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
 {
+    options.Conventions.AuthorizeFolder("/Admin");
     options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
     options.Conventions.AuthorizeFolder("/Dashboard");
+    options.Conventions.AuthorizeFolder("/Admin/DbStatus");
     // Allow anonymous for auth-related pages
     options.Conventions.AllowAnonymousToFolder("/hubs");
+    
+    
     options.Conventions.AllowAnonymousToFolder("/assets");
-    options.Conventions.AllowAnonymousToFolder("/Admin");
+    
     options.Conventions.AllowAnonymousToFolder("/css");
     options.Conventions.AllowAnonymousToFolder("/js");
     options.Conventions.AllowAnonymousToPage("/Index");
@@ -37,12 +41,14 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AllowAnonymousToPage("/Chat");
     options.Conventions.AllowAnonymousToPage("/Cv");
     options.Conventions.AllowAnonymousToPage("/Cv");
-    options.Conventions.AllowAnonymousToPage("/Admin/DbStatus");
+    
     options.Conventions.AllowAnonymousToPage("/Admin/Login");
     options.Conventions.AllowAnonymousToPage("/Admin/Register");
     options.Conventions.AllowAnonymousToPage("/Admin/ConfirmEmail");
     options.Conventions.AllowAnonymousToPage("/Admin/ForgotPassword");
     options.Conventions.AllowAnonymousToPage("/Admin/ResetPassword");
+    options.Conventions.AllowAnonymousToPage("/Projects");
+    options.Conventions.AllowAnonymousToPage("/Blog");
 });
 
 // WebOptimizer (SCSS, bundling, minification)
