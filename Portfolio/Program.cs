@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Database;
+using Portfolio.Helpers;
 using Portfolio.Hubs;
 using Portfolio.Models;
 using Portfolio.Services;
-using Portfolio.Helpers;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +27,7 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
     options.Conventions.AuthorizeFolder("/Dashboard");
     // Allow anonymous for auth-related pages
+    options.Conventions.AllowAnonymousToFolder("/hubs");
     options.Conventions.AllowAnonymousToFolder("/assets");
     options.Conventions.AllowAnonymousToFolder("/Admin");
     options.Conventions.AllowAnonymousToFolder("/css");
@@ -52,7 +53,7 @@ builder.Services.AddWebOptimizer(pipeline =>
         "scss/site.scss",
         "css/animate.css",
         "assets/css/site.min.css"
-        );
+    );
 
     pipeline.MinifyCssFiles();
 
@@ -66,7 +67,9 @@ builder.Services.AddWebOptimizer(pipeline =>
         "js/voicechat.js",
         "js/notifications.js",
         "js/site.js"
-        );
+    );
+
+    pipeline.MinifyJsFiles();
 });
 
 // EF Core - SQLite (stable data folder)
@@ -229,7 +232,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 //app.UseHttpsRedirection();
 // WebOptimizer must come BEFORE StaticFiles
 app.UseWebOptimizer();
-// ✅ Serve static files (CSS, JS, fonts, etc.)
+// Serve static files (CSS, JS, fonts, etc.)
 app.UseStaticFiles();
 
 // Routing

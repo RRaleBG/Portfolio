@@ -51,6 +51,7 @@ namespace Portfolio.Helpers
             // Seed admin user
             var userMgr = sp.GetRequiredService<UserManager<IdentityUser>>();
             const string adminEmail = "rajcicrados@hotmail.com";
+            const string adminPassword = "Admin123!"; // You can change this to your preferred password
             var adminUser = await userMgr.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
@@ -58,9 +59,9 @@ namespace Portfolio.Helpers
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true,
+                    EmailConfirmed = true, // Set to true for immediate access
                 };
-                var result = await userMgr.CreateAsync(adminUser, "Admin123!");
+                var result = await userMgr.CreateAsync(adminUser, adminPassword);
                 if (result.Succeeded)
                 {
                     await userMgr.AddToRoleAsync(adminUser, adminRole);

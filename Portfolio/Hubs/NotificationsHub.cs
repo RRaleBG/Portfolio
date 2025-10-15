@@ -39,5 +39,10 @@ namespace Portfolio.Hubs
         // Send to an arbitrary group
         public Task SendToGroup(string groupName, string title, string message)
             => Clients.Group(groupName).SendAsync("ReceiveNotification", new { title, message, timestamp = DateTime.UtcNow });
+
+        public async Task NotifyUser(string userId, string message)
+        {
+            await Clients.User(userId).SendAsync("ReceiveNotification", message);
+        }
     }
 }

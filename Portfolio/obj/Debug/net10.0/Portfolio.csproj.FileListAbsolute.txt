@@ -264,8 +264,8 @@ C:\Users\rale_\source\repos\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.genr
 C:\Users\rale_\source\repos\Portfolio\PORTFOLIO\obj\Debug\net10.0\ref\Portfolio.dll
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\appsettings.Development.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\appsettings.json
-D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.staticwebassets.endpoints.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.staticwebassets.runtime.json
+D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.staticwebassets.endpoints.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.exe
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.deps.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\bin\Debug\net10.0\Portfolio.runtimeconfig.json
@@ -439,6 +439,7 @@ D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.MvcApplicationPa
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.MvcApplicationPartsAssemblyInfo.cache
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.RazorAssemblyInfo.cache
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.RazorAssemblyInfo.cs
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.sourcelink.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\rjimswa.dswa.cache.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -447,7 +448,7 @@ D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\scopedcss\bundle\Portfolio
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\scopedcss\projectbundle\Portfolio.bundle.scp.css
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\bevtt6e5iy-{0}-boc0xkkdhp-boc0xkkdhp.gz
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\8mfu681els-{0}-23rc2fq47f-23rc2fq47f.gz
-D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\7u0i9x6hv8-{0}-61n19gt1b8-61n19gt1b8.gz
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\7u0i9x6hv8-{0}-h0u1strp7s-h0u1strp7s.gz
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\xihit3jhr8-{0}-v7i5q8j9x2-v7i5q8j9x2.gz
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\0ajvua0zf2-{0}-vwbl5h33vr-vwbl5h33vr.gz
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\compressed\2frtfnkgf0-{0}-tifl2ret90-tifl2ret90.gz
@@ -519,10 +520,10 @@ D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\staticwebassets.build.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\staticwebassets.development.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\swae.build.ex.cache
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.csproj.Up2Date
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.dll
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\refint\Portfolio.dll
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.pdb
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\Portfolio.genruntimeconfig.cache
 D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\ref\Portfolio.dll
-D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

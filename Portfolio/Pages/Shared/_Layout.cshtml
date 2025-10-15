@@ -7,24 +7,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Rados_Ai_Portfolio</title>
+    <title>@ViewData["Title"] - Rados Rajcic</title>
     <meta name="theme-color" content="#0b0b0f" />
-
-    <script nonce="@ViewData["CSPNonce"]">
-        document.documentElement.classList.add('js');
-    </script>
-    <script nonce="@ViewData["CSPNonce"]">
-        (function () {
-            const key = 'theme-preference';
-            const html = document.documentElement;
-            const prefersDark = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            let t = null;
-            try { t = localStorage.getItem(key); } catch { }
-            if (!t) { t = prefersDark() ? 'dark' : 'light'; }
-            html.setAttribute('data-bs-theme', t);
-            html.setAttribute('data-theme', t);
-        })();
-    </script>
 
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.bundle.css" asp-append-version="true" />
@@ -53,6 +37,7 @@
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                         <li class="nav-item"><a class="nav-link" asp-page="/Projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Admin/Index">Admin</a></li>
                         <li class="nav-item"><a class="nav-link" asp-page="/Blog">Blogs</a></li>
                         <li class="nav-item"><a class="nav-link" asp-page="/Cv">CV</a></li>
                         <li class="nav-item"><a class="nav-link" asp-page="/Chat">Chat</a></li>
@@ -89,7 +74,7 @@
         </nav>
     </header>
     <div class="container-xxl">
-        <main role="main" class="pb-4 reveal-inside">
+        <main role="main" class="pb-4 reveal js reveal-inside">
             @RenderBody()
         </main>
     </div>
@@ -99,73 +84,8 @@
     </button>
 
     <!-- scripts -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- core site scripts -->
-    <script src="~/js/site.bundle.js" asp-append-version="true" defer></script>
-    <script src="/js/site.js" asp-append-version="true"></script>
-
-    <script src="/js/signalR.js" asp-append-version="true"></script>
-    <script src="/js/voicechat.js" asp-append-version="true"></script>
-    <script src="/js/notifications.js" asp-append-version="true"></script>
-    <script>
-        // Only handle user toggling; initial theme already set in head
-        (function () {
-            const key = 'theme-preference';
-            const html = document.documentElement;
-            const btn = document.getElementById('theme-toggle');
-            function current() { return html.getAttribute('data-bs-theme') || 'light'; }
-            function set(t) { html.setAttribute('data-bs-theme', t); html.setAttribute('data-theme', t); try { localStorage.setItem(key, t); } catch { } }
-            function icon() { if (btn) btn.textContent = current() === 'dark' ? '☀️' : '🌙'; }
-            icon();
-            if (btn) { btn.addEventListener('click', function () { set(current() === 'light' ? 'dark' : 'light'); icon(); }); }
-        })();
-    </script>
-    <script>
-        // Page-load reveal animations (staggered)
-        (function () {
-            function revealOnLoad() {
-                const ordered = [];
-
-                // const nav = document.querySelector('header .navbar');
-                // if (nav) ordered.push(nav);
-
-                const mainChildren = Array.from(document.querySelectorAll('main > *:not(script):not(style)'));
-                if (mainChildren.length) ordered.push(...mainChildren);
-
-                const extras = Array.from(document.querySelectorAll('main .card, main .list-group, main .table'));
-                extras.forEach(el => { if (!ordered.includes(el)) ordered.push(el); });
-
-                if (ordered.length === 0) {
-                    const main = document.querySelector('main');
-                    if (main) ordered.push(main);
-                }
-
-                ordered.forEach(el => el.classList.add('reveal'));
-                ordered.forEach((el, i) => {
-                    const delay = Math.min(80 * i, 700); // cap delay
-                    setTimeout(() => el.classList.add('visible'), delay);
-                });
-
-                // Reveal main content with scale-in
-                var mainReveal = document.querySelector('main.reveal-inside');
-                if (mainReveal) {
-                    mainReveal.classList.add('reveal-inside');
-                    setTimeout(function () {
-                        mainReveal.classList.add('visible');
-                    }, 120);
-                }
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', revealOnLoad);
-            } else {
-                revealOnLoad();
-            }
-        })();
-    </script>
+    <script src="/js/site.bundle.js" asp-append-version="true"></script>
+    <!-- Only use the bundle, remove individual script tags for files already in the bundle -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

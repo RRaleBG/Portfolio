@@ -1,0 +1,5 @@
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Release\net10.0\linux-x64\PubTmp\Out\appsettings.Development.json
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Release\net10.0\linux-x64\PubTmp\Out\appsettings.json
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Release\net10.0\linux-x64\PubTmp\Out\Portfolio.pdb
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Release\net10.0\linux-x64\PubTmp\Out\libe_sqlite3.so
+D:\Net.Core.Web\Portfolio\PORTFOLIO\obj\Release\net10.0\linux-x64\PubTmp\Out\Portfolio

@@ -1,0 +1,37 @@
+/* Reveal animation fix for all browsers */
+.reveal {
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Animation fix for reveal-inside */
+.reveal-inside {
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+.reveal-inside.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Ensure main content is visible by default */
+main {
+    opacity: 1;
+    transition: none;
+}
+
+/* Fix for Bootstrap container and navbar visibility */
+.container-xxl, .navbar, .card, .list-group, .table {
+    opacity: 1;
+    transition: none;
+}

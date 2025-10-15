@@ -5,9 +5,13 @@
     <AssemblyName>Portfolio</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="wwwroot\RajcicRados.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="3.24.1" />

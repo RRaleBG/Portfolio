@@ -1,0 +1,360 @@
+﻿@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/inter-v20-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('/fonts/space-grotesk/spacegrotesk-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+// Design tokens inspired by modern portfolio aesthetics
+$font-sans: 'Inter', 'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+$radius: .9rem;
+$shadow: 0 10px 30px rgba(0, 0, 0, .25);
+$primary: #7c3aed; // purple
+$secondary: #22d3ee; // cyan
+$success: #22c55e;
+$danger: #ef4444;
+$warning: #f59e0b;
+$info: #0ea5e9;
+
+
+// Dark/Light surfaces variables
+:root {
+    --bg: #0b0b0f;
+    --fg: #e7e7ea;
+    --card: #101017;
+    --muted: #a1a1aa;
+    --glass: rgba(16, 16, 23, .55);
+    --glass-border: rgba(255, 255, 255, .08);
+}
+
+html[data-theme='light'] {
+    --bg: #ffffff;
+    --fg: #1f2937;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --glass: rgba(255, 255, 255, .6);
+    --glass-border: rgba(0, 0, 0, .06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: $font-sans;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+// Force white background in light theme
+html[data-theme='light'] body {
+    background-color: #ffffff;
+    color: #1f2937;
+    background-image: none; // just white background
+}
+
+// Also neutralize hero/ornaments in light theme for a clean white canvas
+html[data-theme='light'] .hero-gradient {
+    background: none !important;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+html[data-theme='light'] .nav-link {
+    color: #2b2f32;
+}
+
+html[data-theme='light'] .bg-ornaments {
+    background: none !important;
+}
+
+
+// Background ornaments (glow blobs + grid)
+.bg-ornaments {
+    position: fixed;
+    inset: -20% -20% auto -20%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(800px 800px at 10% 10%, rgba($secondary, .18), transparent 60%), radial-gradient(900px 900px at 90% 0%, rgba($primary, .18), transparent 60%), radial-gradient(700px 700px at 50% 100%, rgba(90, 255, 90, .12), transparent 60%), linear-gradient(180deg, rgba(255, 255, 255, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
+    background-position: center;
+    filter: saturate(120%);
+}
+
+
+// Body base (as requested)
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: #0b0c10;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #eaeaea;
+    /* Grid background pattern */
+    /*  background-image:
+    linear-gradient(90deg, rgba(0,255,170,0.05) 1px, transparent 1px),
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+  background-repeat: repeat, repeat;
+  background-position: top left, top left;
+  background-attachment: fixed, fixed;*/
+}
+
+// Background ornaments (glow blobs + grid)
+.bg-ornaments {
+    position: fixed;
+    inset: 0; // cover entire viewport
+    width: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        radial-gradient(800px 800px at 10% 10%, rgba($secondary, .18), transparent 60%),
+        radial-gradient(900px 900px at 90% 0%, rgba($primary, .18), transparent 60%),
+        radial-gradient(700px 700px at 50% 100%, rgba(90, 255, 90, .12), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+    background-size: auto, auto, auto, 24px 24px, 24px 24px;
+    background-position: center;
+    filter: saturate(120%);
+}
+
+// Glassmorphism helpers
+.glass {
+    background: var(--glass);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+    @extend .glass;
+    border-radius: $radius;
+    box-shadow: $shadow;
+}
+
+.glass-nav {
+    @extend .glass;
+    border-radius: 16px;
+    margin: .75rem auto;
+    padding: .25rem .75rem;
+}
+
+// Elevation & cards
+.card {
+    @extend .glass-card;
+}
+
+// Links & buttons
+a {
+    text-decoration: none;
+}
+
+.brand-gradient {
+    background: linear-gradient(90deg, $secondary, $primary 60%, #7dd3fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, $secondary, $primary);
+    border: 0;
+    box-shadow: 0 6px 20px rgba($primary, .35);
+}
+
+.btn-primary:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    border-radius: .6rem;
+    border-color: var(--glass-border);
+    color: var(--fg);
+}
+
+.btn-outline-secondary:hover {
+    background: rgba(255, 255, 255, .06);
+}
+
+// Reveal animation
+.reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .6s ease, transform .6s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+// Hover lift
+.hover-lift {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow;
+}
+
+// Page gradient accent remains
+.hero-gradient {
+    background: radial-gradient(800px circle at 0% 0%, rgba($secondary, .15), transparent 40%),
+        radial-gradient(800px circle at 100% 0%, rgba($primary, .15), transparent 40%);
+}
+
+// Progress bar
+#progressbar {
+    @extend .glass;
+}
+
+#progressbar .progress-bar {
+    background: linear-gradient(90deg, $secondary, $primary);
+}
+
+// Toast variants
+.toast {
+    @extend .glass;
+}
+
+.toast.success {
+    --bs-toast-border-color: #22c55e;
+    --bs-toast-header-bg: rgba(34, 197, 94, .08);
+}
+
+.toast.error {
+    --bs-toast-border-color: #ef4444;
+    --bs-toast-header-bg: rgba(239, 68, 68, .08);
+}
+
+.toast.info {
+    --bs-toast-border-color: #0ea5e9;
+    --bs-toast-header-bg: rgba(14, 165, 233, .08);
+}
+
+
+
+
+
+// Typography scale
+:root {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    :root {
+        font-size: 16px;
+    }
+}
+
+// Forms polish
+.form-control {
+    @extend .glass;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 .15rem rgba($primary, .35);
+    border-color: rgba($primary, .5);
+}
+
+// Cards spacing
+.container-xxl main>*+* {
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .container-xxl main>*+* {
+        margin-top: 1.25rem;
+    }
+}
+
+// Reduce motion
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
+
+
+.invalid-feedback::before {
+    content: "⚠️ ";
+    margin-right: 4px;
+}
+
+.invalid-feedback {
+    transition: color 0.3s;
+}
+
+/*.invalid-feedback {
+    color: #ec0867; // Custom error color
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    background: none;
+    border-radius: 0.25rem;
+    padding-left: 2px;*/
+/* Add shadow or animation if desired */
+/*box-shadow: 0 2px 8px rgba(236,8,103,0.08); 
+}*/
+.text-danger {
+    color: #ff3b3b;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.js .reveal-inside {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+.js .reveal-inside.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.reveal,
+.js .reveal-inside {
+    transition-duration: 1.5s !important; // was 0.6s or 0.7s, now much slower
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.star.selected {
+    color: #f5b301;
+}
+
+.star.selected {
+    color: #f5b301;
+}
